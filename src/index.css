@@ -1,0 +1,17 @@
+:root {
+  --common: #999;
+  --uncommon: #13e647;
+  --magic: #233ff7;
+  --rare: #b223eb;
+  --epic: #ffd209;
+  --legendary: #f81d1d;
+  --main: rgb(207, 241, 9);
+  --secondary: rgb(10, 60, 82);
+  --warning: #f79696;
+  --success: rgb(27, 204, 27);
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
