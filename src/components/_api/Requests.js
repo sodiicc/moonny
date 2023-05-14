@@ -1,7 +1,7 @@
-require('dotenv').config()
+// require('dotenv').config()
 
+let url = 'http://127.0.0.1:9000/'
 // let url = process.env.REACT_APP_API_URL || 'http://127.0.0.1:9000/'
-let url = process.env.REACT_APP_API_URL || 'http://192.168.1.6:9000/'
 const get_headers = (token = localStorage.getItem('token')) => {
   return {
     method: 'GET',

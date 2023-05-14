@@ -3,7 +3,7 @@ import ReactTooltip from 'react-tooltip'
 
 export default function Bot({ diff, exp, img, onClick, numberDifficulty }) {
   return (
-    <div className={'bot' + ' ' + diff.toLowerCase()}>
+    <div className={`bot ${diff.toLowerCase()}`}>
       <ReactTooltip
         multiline={true}
         aria-haspopup='true'

@@ -1,0 +1,13 @@
+{
+  "login": "Login",
+  "register": "Register",
+  "password": "Password",
+  "confirm": "Confirm",
+  "confirm_pass": "Confirm the password",
+  "enter_pass": "Enter your password",
+  "enter_name": "Enter character name",
+  "error_name_length": "Username should be at least 4 characters",
+  "error_pass_length": "Password should be at least 6 characters",
+  "logout": "Logout",
+  "moonnymathics": "MoonnyMathics"
+}

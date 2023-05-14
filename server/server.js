@@ -3,6 +3,7 @@ const express = require('express')
 const cors = require('cors')
 const { Pool } = require('pg')
 const tasks = require('./tasks')
+const { tables } = require('./tables')
 const query = require('./query')
 const battle_calc = require('./battle_calc')
 const exp_calc = require('./exp_calc')
@@ -11,7 +12,7 @@ const bot_generator = require('./bot_generator')
 // const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const authMiddleware = require('./authMiddleware')
-const {getDrop} = require('./items')
+const { getDrop } = require('./items')
 // const {bonus_for_sets} = require('./dictionary')
 const { getCharacterData } = require('./helper')
 
@@ -33,6 +34,26 @@ const pool = new Pool({
   port: 5432,
 })
 // client.connect();
+
+const execute = async query => {
+  try {
+    await pool.connect();
+    await pool.query(query);
+    return true;
+  } catch (error) {
+    console.error(error.stack);
+    return false;
+  }
+};
+
+tables.forEach(table => {
+  execute(table).then(result => {
+    console.log('result', result)
+    if (result) {
+      console.log('Table created');
+    }
+  });
+})
 
 app.get('/character/:name', async (req, res) => {
   const char = await pool.query(query.get_char_info, [req.params.name])
@@ -58,17 +79,17 @@ app.post('/register', async (req, res) => {
     )
   } else {
     res.sendStatus(401)
-  }  
+  }
 })
 
 app.post('/signin', (req, res) => {
   const { username, password } = req.body
-  const token = jwt.sign({username}, process.env.SECRET_KEY, {expiresIn: '24h'})
+  const token = jwt.sign({ username }, process.env.SECRET_KEY, { expiresIn: '24h' })
   pool.query(query.check_auth, [username, password])
-  .then(response => {
-    if (response.rows[0].count === '1') res.status(200).json({token, username})
-    else res.sendStatus(401)
-  })
+    .then(response => {
+      if (response.rows[0].count === '1') res.status(200).json({ token, username })
+      else res.sendStatus(401)
+    })
 })
 
 app.get('/getexp', (req, res) => {
@@ -79,16 +100,16 @@ app.get('/getexp', (req, res) => {
   res.send([exp])
 })
 
-app.get('/wearitem', ({query : {id, wear, character_name, type}}, response) => {
-  pool.query(query.get_wearing_items, [character_name, wear], (err, resp) => { 
+app.get('/wearitem', ({ query: { id, wear, character_name, type } }, response) => {
+  pool.query(query.get_wearing_items, [character_name, wear], (err, resp) => {
     const weared_item = resp.rows.find(el => el.type === type)
     if (!weared_item || !wear) {
       pool.query(query.set_wear_item, [id, wear], () => { })
       response.json(wear ? 'weared' : 'unweared')
     } else {
       pool.query(query.set_wear_item, [weared_item.id, false], () => { })
-      pool.query(query.set_wear_item, [id, wear], () => { response.json(wear ? 'weared' : 'unweared')})
-    } 
+      pool.query(query.set_wear_item, [id, wear], () => { response.json(wear ? 'weared' : 'unweared') })
+    }
   })
 })
 
@@ -96,7 +117,7 @@ app.get('/getallbotexp', (req, res) => {
   const lvl = req.query.lvl
   const bot_lvl = req.query.botlvl
   const resultExp = []
-  for(let i = 0; i < 6; i++) {
+  for (let i = 0; i < 6; i++) {
     const exp = exp_calc.get_real_exp(lvl, bot_lvl, i) + ''
     resultExp.push(exp)
   }
@@ -231,11 +252,11 @@ app.get('/answer', async (req, res) => {
   let result_fight = null
   if (is_end)
     result_fight =
-    leftHpForCheck() > enemy_hp_left
+      leftHpForCheck() > enemy_hp_left
         ? 'win'
         : leftHpForCheck() < enemy_hp_left
-        ? 'lose'
-        : 'draw'
+          ? 'lose'
+          : 'draw'
   let exp =
     result_fight === 'win'
       ? exp_calc.get_real_exp(char.lvl, enemy.lvl, enemy.diff)
@@ -304,15 +325,15 @@ app.get('/answer', async (req, res) => {
       nickname,
     ]
   )
-  .then(() => {
-    pool.query(
-      query.set_bot_hp,
-      [enemy_hp_left, nickname],
-      (err, response) => {
-        res.send(ret)
-      }
-    )
-  })
+    .then(() => {
+      pool.query(
+        query.set_bot_hp,
+        [enemy_hp_left, nickname],
+        (err, response) => {
+          res.send(ret)
+        }
+      )
+    })
 })
 
 app.listen(port, () => {

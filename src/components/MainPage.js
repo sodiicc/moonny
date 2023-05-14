@@ -20,7 +20,7 @@ import {
 } from './_api/Requests'
 import Bot from './Bot'
 
-require('dotenv').config()
+// require('dotenv').config()
 
 // const url = process.env.REACT_APP_API_URL || "http://127.0.0.1:5000/api";
 
@@ -41,10 +41,7 @@ export default function MainPage(props) {
   const [drop, setDrop] = useState(false)
   const [botLvl, setBotLvl] = useState(1)
   const [botDiff, setBotDiff] = useState(1)
-  const [showExp, setShowExp] = useState(1)
   const [botExp, setBotExp] = useState([null, null, null, null])
-
-  // const socket = io(url);
 
   useEffect(() => {
     if (!user) {
@@ -52,6 +49,7 @@ export default function MainPage(props) {
       return
     }
     getCharacterInfo(true)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
   useEffect(() => {
@@ -173,7 +171,6 @@ export default function MainPage(props) {
       />
       <Header logoutHandler={logoutHandler} charInfo={{ lvl, nickname }} />
       <div className="container">
-        {showExp}
         <div className="game">
           {bagOpen ? (
             <Inventory
