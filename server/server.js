@@ -27,12 +27,19 @@ app.use(express.urlencoded({
 }))
 
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'MoonnyMathics',
-  password: 'trader32',
-  port: 5432,
+  host: process.env.DB_HOST || 'localhost',
+  user: process.env.DB_USER,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: parseInt(process.env.DB_PORT || "5432")
 })
+// const pool = new Pool({
+//   user: 'postgres',
+//   host: 'localhost',
+//   database: 'MoonnyMathics',
+//   password: 'trader32',
+//   port: 5432,
+// })
 // client.connect();
 
 const execute = async query => {
