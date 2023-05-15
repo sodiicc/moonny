@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.3'
 services:
   api:
     container_name: api
@@ -22,10 +22,10 @@ services:
       - 80:80
 
   db:
-    container_name: postgres
+    container_name: postg
     image: postgres
     ports:
-      - '5432:${DB_PORT}'
+      - '5431:${DB_PORT}'
     volumes:
       - data:/data/db
     environment:
